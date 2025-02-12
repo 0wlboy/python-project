@@ -23,10 +23,10 @@ while True:  # Bucle principal para el menú de inicio
 
     if opcion == '1':
         while True:  # Bucle para el menú de productos
-            print('1) Ingresar nuevo producto\n2) Eliminar producto\n3) Modificar producto\n4) Ver lista\n5) Salir')
+            print('1) Ingresar nuevo producto\n2) Eliminar producto\n3) Modificar producto\n4) Ver lista\n5) Exportar a csv \n6)Salir')
             while True:  # Bucle para validar la entrada del usuario
                 opcion_producto = input('Ingrese un número correspondiente a las opciones ya dadas: ')
-                if opcion_producto in ('1', '2', '3', '4', '5'):
+                if opcion_producto in ('1', '2', '3', '4', '5','6'):
                     break
                 print('Por favor ingrese un número válido')
                 time.sleep(1)
@@ -45,6 +45,8 @@ while True:  # Bucle principal para el menú de inicio
                 case '4':
                     funciones.verLista(listaProductos, 1)
                 case '5':
+                    funciones.export_csv(listaProductos,1)
+                case '6':
                     break  # Sale del menú de productos y regresa al menú principal
 
             time.sleep(1)
@@ -52,10 +54,10 @@ while True:  # Bucle principal para el menú de inicio
 
     elif opcion == '2':
         while True:  # Bucle para el menú de usuarios
-            print('1) Ingresar nuevo Usuario\n2) Eliminar Usuario\n3) Modificar Usuario\n4) Ver lista\n5) Salir')
+            print('1) Ingresar nuevo Usuario\n2) Eliminar Usuario\n3) Modificar Usuario\n4) Ver lista\n5) Exportar a csv \n6)Salir')
             while True:  # Bucle para validar la entrada del usuario
                 opcion_usuario = input('Ingrese un número correspondiente a las opciones ya dadas: ')
-                if opcion_usuario in ('1', '2', '3', '4', '5'):
+                if opcion_usuario in ('1', '2', '3', '4', '5','6'):
                     break
                 print('Por favor ingrese un número válido')
                 time.sleep(1)
@@ -74,8 +76,9 @@ while True:  # Bucle principal para el menú de inicio
                 case '4':
                     funciones.verLista(listaUsuarios, 2)
                 case '5':
-                    break  # Sale del menú de usuarios y regresa al menú principal
-
+                    funciones.export_csv(listaUsuarios,2)
+                case '6':
+                    break
             time.sleep(1)
             os.system('cls')
 

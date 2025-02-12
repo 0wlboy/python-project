@@ -4,6 +4,12 @@ import clases
 import re
 import pandas as pd
 import yagmail
+from dotenv import load_dotenv
+import pywhatkit as kit
+import datetime
+import requests
+
+load_dotenv()
 
 regex_email = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 regex_telefono = r"^(?:\+?1[-.\s]?)?(?:\(\d{3}\)[-.\s]?|\d{3}[-.\s]?)(?:\d{3}[-.\s]?\d{4})$"
@@ -16,34 +22,76 @@ def atributo_repetido(nuevo_valor, lista, atributo):
                 print('Este correo ya esta registrado')
                 return True  # El email ya existe
         elif atributo == "nombre":
-            if nuevo_valor == valor_item:
+            if nuevo_valor.upper() == valor_item.upper():
                 print('Este producto ya esta registrado')
                 return True  # El nombre ya existe
     return False  # El valor no existe
 
-def enviarCorreo(receptor, nombre):
-  asunto = 'Confirmacion de registro'
-  cuerpo = f'{nombre} a sido registrado en el sistema de Inventarios OS'
-  remitente = 'cesarcordero496@gmail.com'
-  password = os. environ.get('password')
-
-  if not password:
-    print('Error: La contraseña no está definida en la variable de entorno password')
-    return False
+def enviarWhastapp(numero,nombre):
+  now = datetime.datetime.now()
+  minutos_envio = now.minute + 3
 
   try:
-    yag = yagmail.SMTP(remitente,password)
-    yag.send(receptor,asunto,cuerpo)
-    print('Correo enviado')
-    return True
-  except yagmail.SMTPAuthenticationError as e:
-    print(f'Error de autenticación SMTP: {e}')
-    return False 
+    kit.sendwhatmsg(numero, f'{nombre} este es un mensaje de cesar', now.hour, minutos_envio, 20, True)
+    print('Mensaje de whatsapp enviado')
   except Exception as e:
-    print(f'Error al enviar el correo: {e}') 
+    print(f"Error al enviar mensaje de WhatsApp: {e}")
+
+def enviarCorreo(receptor, nombre):
+  api_key = os.getenv('MAILGUN_API_KEY')  # Nombre más descriptivo para la variable
+  if not api_key:
+        print("Error: La clave de API de Mailgun no está definida en la variable de entorno MAILGUN_API_KEY")
+        return False  # Indica que hubo un error
+
+  try:
+        response = requests.post(
+            "https://api.mailgun.net/v3/sandbox75e494f9f3b140a3b4101e02df3013d9.mailgun.org/messages",  # Usar variable de entorno para el dominio
+            auth=("api", api_key),
+            data={
+                "from": "Inventarios OS <inventarios@tu_dominio.com>",  # Remitente más profesional
+                "to": f"{nombre} <{receptor}>",
+                "subject": "Confirmación de registro",  # Asunto más descriptivo
+                "text": f"Hola {nombre}, bienvenido al sistema de Inventarios OS."  # Mensaje más relevante
+            })
+
+        response.raise_for_status()  # Lanza una excepción para códigos de estado HTTP no exitosos (4xx o 5xx)
+        print("Correo electrónico enviado correctamente.")
+        return True  # Indica éxito
+
+  except requests.exceptions.RequestException as e:
+        print(f"Error al enviar correo: {e}")
+        if response:  # Imprime el contenido de la respuesta si está disponible
+            print(f"Código de estado: {response.status_code}")
+            try:  # Intenta decodificar el JSON de la respuesta para obtener más detalles
+                error_data = response.json()
+                print(f"Detalles del error: {error_data}")
+            except ValueError:  # Si la respuesta no es JSON, imprime el texto
+                print(f"Respuesta del servidor: {response.text}")
+        return False  # Indica que hubo un error
+
+def export_csv(lista,tipo):
+  if not lista:
+      print('No hay elementos en la lista')
+      return
+  lista_diccionarios = [vars(item) for item in lista]
+  df = pd.DataFrame(lista_diccionarios)
+
+  if tipo==1:
+     nombre_archivo = 'tabla de Productos'
+  else:
+     nombre_archivo = 'tabla de usuarios'
+
+  try:  
+    df.to_csv(nombre_archivo, index=False, sep=';')
+    return True
+  except Exception as e:
+     print(f'Error al exportar DataFrame: {e}')
+     return False
+
+
+
 
 def agregarProducto(lista):
-  
   while True:
     nombre = input('Nombre del producto: ')
     if not atributo_repetido(nombre, lista, 'nombre') and not nombre == '':
@@ -97,8 +145,9 @@ def agregarUsuarios(lista):
     print('Email invalido') 
       
   while True: 
-    telefono = input('Telefono del usuario: ')
-    if re.match(regex_telefono,telefono): 
+    telefono = input('Telefono del usuario: +58')
+    if re.match(regex_telefono,telefono):
+      telefono = '+58'+telefono 
       break;
     print('Porfavor ingrese un numero telefonico valido')
     
@@ -110,6 +159,8 @@ def agregarUsuarios(lista):
   
   item = clases.Usuarios(nombre,email,telefono,direccion)
   lista.append(item)
+  #enviarCorreo(email,nombre)
+  #enviarWhastapp(telefono, nombre)
   print('Usuario añadido correctamente.')
   time.sleep(1)
 
@@ -175,6 +226,7 @@ def verLista(lista, num):
     if not grupo.empty:
       print(grupo.to_string(index=True))
       print("--------------------------------------------------")
+      input('Presione enter para continuar')
       time.sleep(1)
 
 

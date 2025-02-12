@@ -1,0 +1,5 @@
+#arcivos a ignorar
+.env
+__pycache__/
+*.log
+*.tmp
