@@ -7,7 +7,7 @@ import yagmail
 from dotenv import load_dotenv
 import pywhatkit as kit
 import datetime
-import requests
+
 
 load_dotenv()
 
@@ -38,36 +38,23 @@ def enviarWhastapp(numero,nombre):
     print(f"Error al enviar mensaje de WhatsApp: {e}")
 
 def enviarCorreo(receptor, nombre):
-  api_key = os.getenv('MAILGUN_API_KEY')  # Nombre más descriptivo para la variable
-  if not api_key:
-        print("Error: La clave de API de Mailgun no está definida en la variable de entorno MAILGUN_API_KEY")
-        return False  # Indica que hubo un error
+    asunto = 'Confirmación de registro'
+    cuerpo = f'{nombre} ha sido registrado en el sistema de Inventarios OS'
+    remitente = 'cesarcordero496@gmail.com'
+    app_key = os.environ.get(' APP_KEY')  # Recupera la contraseña de una variable de entorno
 
-  try:
-        response = requests.post(
-            "https://api.mailgun.net/v3/sandbox75e494f9f3b140a3b4101e02df3013d9.mailgun.org/messages",  # Usar variable de entorno para el dominio
-            auth=("api", api_key),
-            data={
-                "from": "Inventarios OS <inventarios@tu_dominio.com>",  # Remitente más profesional
-                "to": f"{nombre} <{receptor}>",
-                "subject": "Confirmación de registro",  # Asunto más descriptivo
-                "text": f"Hola {nombre}, bienvenido al sistema de Inventarios OS."  # Mensaje más relevante
-            })
+    if not app_key:
+        print('Error: La contraseña no está definida en la variable de entorno APP_KEY')
+        return False  # Retorna False si la contraseña no está definida
 
-        response.raise_for_status()  # Lanza una excepción para códigos de estado HTTP no exitosos (4xx o 5xx)
-        print("Correo electrónico enviado correctamente.")
-        return True  # Indica éxito
-
-  except requests.exceptions.RequestException as e:
-        print(f"Error al enviar correo: {e}")
-        if response:  # Imprime el contenido de la respuesta si está disponible
-            print(f"Código de estado: {response.status_code}")
-            try:  # Intenta decodificar el JSON de la respuesta para obtener más detalles
-                error_data = response.json()
-                print(f"Detalles del error: {error_data}")
-            except ValueError:  # Si la respuesta no es JSON, imprime el texto
-                print(f"Respuesta del servidor: {response.text}")
-        return False  # Indica que hubo un error
+    try:
+        yag = yagmail.SMTP(remitente, app_key)
+        yag.send(receptor, asunto, cuerpo)
+        print('Correo enviado')
+        return True  # Retorna True si el correo se envió correctamente
+    except Exception as e:
+        print(f'Error al enviar el correo: {e}')
+        return False  # Retorna False si hay otro error
 
 def export_csv(lista,tipo):
   if not lista:
@@ -159,7 +146,7 @@ def agregarUsuarios(lista):
   
   item = clases.Usuarios(nombre,email,telefono,direccion)
   lista.append(item)
-  #enviarCorreo(email,nombre)
+  enviarCorreo(email,nombre)
   #enviarWhastapp(telefono, nombre)
   print('Usuario añadido correctamente.')
   time.sleep(1)
