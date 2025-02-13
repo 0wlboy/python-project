@@ -1,9 +1,12 @@
 import time
 import os
-import funciones  # Asegúrate de importar tus funciones
+import funciones 
+import clases
 
 listaProductos = []  # Inicializa tus listas
 listaUsuarios = []
+
+listaUsuarios.append(clases.Usuarios('Carlos','carlos1234@gmail.com','+58414987123','su casas'))
 
 while True:  # Bucle principal para el menú de inicio
     print('Bienvenido a Inventarie OS.')
@@ -23,7 +26,7 @@ while True:  # Bucle principal para el menú de inicio
 
     if opcion == '1':
         while True:  # Bucle para el menú de productos
-            print('1) Ingresar nuevo producto\n2) Eliminar producto\n3) Modificar producto\n4) Ver lista\n5) Exportar a csv \n6)Salir')
+            print('1) Ingresar nuevo producto\n2) Eliminar producto\n3) Modificar producto\n4) Ver lista\n5) Exportar a csv \n6) Salir')
             while True:  # Bucle para validar la entrada del usuario
                 opcion_producto = input('Ingrese un número correspondiente a las opciones ya dadas: ')
                 if opcion_producto in ('1', '2', '3', '4', '5','6'):
@@ -41,7 +44,7 @@ while True:  # Bucle principal para el menú de inicio
                 case '2':
                     funciones.eliminar(listaProductos)
                 case '3':
-                    funciones.update(listaProductos)
+                    funciones.update(listaProductos,1)
                 case '4':
                     funciones.verLista(listaProductos, 1)
                 case '5':
@@ -54,7 +57,7 @@ while True:  # Bucle principal para el menú de inicio
 
     elif opcion == '2':
         while True:  # Bucle para el menú de usuarios
-            print('1) Ingresar nuevo Usuario\n2) Eliminar Usuario\n3) Modificar Usuario\n4) Ver lista\n5) Exportar a csv \n6)Salir')
+            print('1) Ingresar nuevo Usuario\n2) Eliminar Usuario\n3) Modificar Usuario\n4) Ver lista\n5) Exportar a csv \n6) Salir')
             while True:  # Bucle para validar la entrada del usuario
                 opcion_usuario = input('Ingrese un número correspondiente a las opciones ya dadas: ')
                 if opcion_usuario in ('1', '2', '3', '4', '5','6'):
@@ -72,7 +75,7 @@ while True:  # Bucle principal para el menú de inicio
                 case '2':
                     funciones.eliminar(listaUsuarios)
                 case '3':
-                    funciones.update(listaUsuarios)
+                    funciones.update(listaUsuarios,2)
                 case '4':
                     funciones.verLista(listaUsuarios, 2)
                 case '5':
