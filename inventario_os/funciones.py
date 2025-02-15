@@ -114,8 +114,8 @@ def eliminar(lista):
   
   while True: 
     try:
-      nombre = int(input('Ingrese el nombre del item a eliminar (dejelo en blanco si no quiere eliminar nada): '))
-      if not nombre:
+      nombre = input('Ingrese el nombre del item a eliminar (dejelo en blanco si no quiere eliminar nada): ')
+      if nombre == '':
         print('Cerrando funcion')
         return
       
@@ -217,7 +217,7 @@ def verLista(lista, num):
 
 def buscar(lista, nombre):
     for i, item in enumerate(lista):
-        if item.nombre == nombre:
+        if item.nombre.lower() == nombre.lower():
             print('Item encontrado')
             return i  
     print('No se encontro el item')

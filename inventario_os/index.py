@@ -1,19 +1,16 @@
 import time
 import os
 import funciones 
-import clases
 
 listaProductos = []  # Inicializa tus listas
 listaUsuarios = []
 
-listaUsuarios.append(clases.Usuarios('Carlos','carlos1234@gmail.com','+58414987123','su casas'))
-
 while True:  # Bucle principal para el menú de inicio
     print('Bienvenido a Inventarie OS.')
     print('')
-    print('Desea ingresar a:\n1) Lista de productos\n2) Lista de usuarios\n3) Salir')
 
     while True:  # Bucle para validar la entrada del usuario
+        print('Desea ingresar a:\n1) Lista de productos\n2) Lista de usuarios\n3) Salir')
         opcion = input('Ingrese un número correspondiente a las opciones ya dadas: ')
         if opcion in ('1', '2', '3'):
             break
@@ -26,8 +23,8 @@ while True:  # Bucle principal para el menú de inicio
 
     if opcion == '1':
         while True:  # Bucle para el menú de productos
-            print('1) Ingresar nuevo producto\n2) Eliminar producto\n3) Modificar producto\n4) Ver lista\n5) Exportar a csv \n6) Salir')
             while True:  # Bucle para validar la entrada del usuario
+                print('1) Ingresar nuevo producto\n2) Eliminar producto\n3) Modificar producto\n4) Ver lista\n5) Exportar a csv \n6) Salir')
                 opcion_producto = input('Ingrese un número correspondiente a las opciones ya dadas: ')
                 if opcion_producto in ('1', '2', '3', '4', '5','6'):
                     break
@@ -57,8 +54,8 @@ while True:  # Bucle principal para el menú de inicio
 
     elif opcion == '2':
         while True:  # Bucle para el menú de usuarios
-            print('1) Ingresar nuevo Usuario\n2) Eliminar Usuario\n3) Modificar Usuario\n4) Ver lista\n5) Exportar a csv \n6) Salir')
             while True:  # Bucle para validar la entrada del usuario
+                print('1) Ingresar nuevo Usuario\n2) Eliminar Usuario\n3) Modificar Usuario\n4) Ver lista\n5) Exportar a csv \n6) Salir')
                 opcion_usuario = input('Ingrese un número correspondiente a las opciones ya dadas: ')
                 if opcion_usuario in ('1', '2', '3', '4', '5','6'):
                     break
