@@ -139,8 +139,11 @@ def update(lista, tipo):
     print('No hay items en la lista.')
     return
   
-  while True: 
-      nombre = input('Ingrese el nombre del item a actualizar (dejelo en blanco si no quiere actualizar nada): ')
+  while True:
+      if tipo == 1:  
+        nombre = input('Ingrese el nombre del producto a actualizar (dejelo en blanco si no quiere actualizar nada): ')
+      if tipo == 2:
+        nombre = input('Ingrese el nombre del usuario a actualizar (dejelo en blanco si no quiere actualizar nada): ')
       if not nombre:
         print('Cerrando funcion')
         return
